@@ -1595,7 +1595,6 @@ namespace System.Management.Automation
         // Cached valid values.
         private string[] _validValues;
         private readonly int _validValuesCacheExpiration;
-        
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedValidValuesGeneratorBase"/> class.
         /// </summary>
@@ -1655,7 +1654,7 @@ namespace System.Management.Automation
         // of 'validValuesGenerator'.
         private readonly string[] _validValues;
         private readonly IValidateSetValuesGenerator validValuesGenerator = null;
-        private readonly ScriptBlock validValuesScript = null;
+        private readonly ScriptBlock validValuesScript;
         // The valid values generator cache works across 'ValidateSetAttribute' instances.
         private static readonly ConcurrentDictionary<Type, IValidateSetValuesGenerator> s_ValidValuesGeneratorCache =
             new ConcurrentDictionary<Type, IValidateSetValuesGenerator>();
@@ -1677,53 +1676,62 @@ namespace System.Management.Automation
         /// The default is true.
         /// </summary>
         public bool IgnoreCase { get; set; } = true;
-
         /// <summary>
         /// Gets the valid values in the set.
         /// </summary>
-        [SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
-        public IList<string> ValidValues
-        {
-            get
-            {
-                if (validValuesGenerator == null && validValuesScript == null)
-                {
-                    return _validValues;
-                }
-                if (validValuesScript is not null)
-                {
-                    var validValuesFromScript = new List<string>();
-                    var customResults = validValuesScript.Invoke();
-                    if (customResults == null || customResults.Count == 0)
-                    {
-                        validValuesFromScript = null;
-                    }
-
-                    foreach (var customResult in customResults)
-                    {
-                        var resultAsString = customResult.BaseObject as string;
-                        if (resultAsString != null)
-                        {
-                            validValuesFromScript.Add(resultAsString);
-                            continue;
-                        }
-                        var resultToString = customResult.ToString();
-                        validValuesFromScript.Add(resultToString);
-                    }
-                    return validValuesFromScript;
-                }
-                var validValuesLocal = validValuesGenerator.GetValidValues();
-
-                if (validValuesLocal == null)
-                {
-                    throw new ValidationMetadataException(
-                        "ValidateSetGeneratedValidValuesListIsNull",
-                        null,
-                        Metadata.ValidateSetGeneratedValidValuesListIsNull);
-                }
-
-                return validValuesLocal;
+        public IList<string> ValidValues {
+            get {
+                return GetValidValuesWithContext();
             }
+        }
+        /// <summary>
+        /// Gets the valid values in the set with support for passing contextual information to a ScriptBlock
+        /// </summary>
+        [SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
+        public IList<string> GetValidValuesWithContext(string commandName = null, string parameterName = null, CommandAst commandAst = null, Hashtable fakeBoundParameters = null)
+        {
+            if (validValuesGenerator == null && validValuesScript == null)
+            {
+                return _validValues;
+            }
+
+            if (validValuesScript is not null)
+            {
+                var validValuesFromScript = new List<string>();
+                fakeBoundParameters ??= new Hashtable();
+                var customResults = validValuesScript.Invoke(new object[] {commandName, parameterName, commandAst, fakeBoundParameters});
+                if (customResults == null || customResults.Count == 0)
+                {
+                    validValuesFromScript = null;
+                }
+
+                foreach (var customResult in customResults)
+                {
+                    var resultAsString = LanguagePrimitives.ConvertTo<string>(customResult);
+                    if (resultAsString != null)
+                    {
+                        validValuesFromScript.Add(resultAsString);
+                        continue;
+                    }
+
+                    var resultToString = customResult.ToString();
+                    validValuesFromScript.Add(resultToString);
+                }
+
+                return validValuesFromScript;
+            }
+
+            var validValuesLocal = validValuesGenerator.GetValidValues();
+
+            if (validValuesLocal == null)
+            {
+                throw new ValidationMetadataException(
+                    "ValidateSetGeneratedValidValuesListIsNull",
+                    null,
+                    Metadata.ValidateSetGeneratedValidValuesListIsNull);
+            }
+
+            return validValuesLocal;
         }
 
         /// <summary>

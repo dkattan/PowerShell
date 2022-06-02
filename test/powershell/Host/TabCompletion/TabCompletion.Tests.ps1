@@ -1105,6 +1105,46 @@ switch ($x)
             $res.CompletionMatches[1].CompletionText | Should -BeExactly 'dog'
         }
 
+        It "Tab completion for validateSet attribute with ScriptBlock with context" {
+            function foo {
+                param (
+                    [Parameter(Mandatory=$true)]
+                    [ValidateSet('Fruits', 'Vegetables')]
+                    $Type,
+
+                    [Parameter(Mandatory=$true)]
+                    [ValidateSet({
+                        param ( $commandName,
+                        $parameterName,
+                        $commandAst,
+                        $fakeBoundParameters )
+
+                        $possibleValues = @{
+                            Fruits = @('Apple', 'Orange')
+                            Vegetables = @('Tomato', 'Squash')
+                        }
+
+                        if ($fakeBoundParameters.ContainsKey('Type')) {
+                            $possibleValues[$fakeBoundParameters.Type]
+                        } else {
+                            $possibleValues.Values | ForEach-Object {$_}
+                        }
+                    })]
+                    $Value
+                )
+            }
+            $inputStr = "foo -Type Fruit -Value "
+            $res = TabExpansion2 -inputScript $inputStr -cursorColumn $inputStr.Length
+            $res.CompletionMatches | Should -HaveCount 2
+            $res.CompletionMatches[0].CompletionText | Should -BeExactly 'Apple'
+            $res.CompletionMatches[1].CompletionText | Should -BeExactly 'Orange'
+            $inputStr = "foo -Type Vegetables -Value "
+            $res = TabExpansion2 -inputScript $inputStr -cursorColumn $inputStr.Length
+            $res.CompletionMatches | Should -HaveCount 2
+            $res.CompletionMatches[0].CompletionText | Should -BeExactly 'Tomato'
+            $res.CompletionMatches[1].CompletionText | Should -BeExactly 'Squash'
+        }
+
         It "Tab completion for validateSet attribute takes precedence over enums" {
             function foo { param([ValidateSet('DarkBlue','DarkCyan')][ConsoleColor]$p) }
             $inputStr = "foo "

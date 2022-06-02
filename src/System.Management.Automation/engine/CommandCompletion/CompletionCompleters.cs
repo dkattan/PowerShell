@@ -1695,7 +1695,7 @@ namespace System.Management.Automation
                     var pattern = WildcardPattern.Get(wordToComplete + "*", WildcardOptions.IgnoreCase);
                     var setList = new List<string>();
 
-                    foreach (string value in setAtt.ValidValues)
+                    foreach (string value in setAtt.GetValidValuesWithContext(commandName, parameter.Parameter.Name, commandAst, GetBoundArgumentsAsHashtable(context)))
                     {
                         if (value == string.Empty)
                         {
@@ -2451,7 +2451,7 @@ namespace System.Management.Automation
             return null;
         }
 
-        private static bool InvokeScriptArgumentCompleter(
+        internal static bool InvokeScriptArgumentCompleter(
             ScriptBlock scriptBlock,
             string commandName,
             string parameterName,
