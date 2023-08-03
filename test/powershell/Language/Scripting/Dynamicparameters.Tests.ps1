@@ -14,6 +14,7 @@ Describe "Dynamic parameter support in script cmdlets." -Tags "CI" {
 
             dynamicparam {
                 if ($PSBoundParameters["path"] -contains "abc") {
+                    New-DynamicParameter -
                     $attributes = [System.Management.Automation.ParameterAttribute]::New()
                     $attributes.ParameterSetName = 'pset1'
                     $attributes.Mandatory = $false

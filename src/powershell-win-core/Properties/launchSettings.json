@@ -1,8 +1,8 @@
-{ 
+{
   "profiles": {
     "powershell-win-core": {
-      "commandName": "Executable",
-      "executablePath": ".\\win7-x64\\publish\\pwsh.exe"
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\DKattan\\source\\repos\\powershell-dkattan\\test\\powershell\\Language\\Scripting\\Dynamicparameters.Tests.ps1"
     }
   }
 }
