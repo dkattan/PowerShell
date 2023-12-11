@@ -105,7 +105,8 @@
     </PropertyGroup>
 
     <!-- Remove existing generated files by source generators because new source code will soon be generated when the build starts -->
-    <RemoveDir Directories="gen\SourceGenerated" Condition="Exists('gen\SourceGenerated')" />
+    <!-- <RemoveDir Directories="gen\SourceGenerated" Condition="Exists('gen\SourceGenerated')"/> -->
+    <RemoveDir Directories="gen\SourceGenerated" Condition="Exists('gen\SourceGenerated') And !$(WasmBuildingForNestedPublish)"/>
 
     <!-- Output For Debugging
       <WriteLinesToFile File="targetfile1.txt"
@@ -161,11 +162,15 @@
   </PropertyGroup>
 
   <!-- Define non-windows, all configuration properties -->
-  <PropertyGroup Condition=" '$(IsWindows)' != 'true' ">
+  <PropertyGroup Condition=" '$(IsWindows)' != 'true' and '$(RuntimeIdentifier)' != 'wasi-wasm' ">
     <DefineConstants>$(DefineConstants);UNIX</DefineConstants>
   </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'wasi-wasm'">
+    <DefineConstants>$(DefineConstants);WASI_WASM_BUILD</DefineConstants>
+ </PropertyGroup>
 
-  <!-- Define all OS, debug configuration properties -->
+ <!-- Define all OS, debug configuration properties -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugType>portable</DebugType>
   </PropertyGroup>

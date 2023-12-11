@@ -7,7 +7,7 @@
     "sdkImageVersion": "8.0.100",
     "nextChannel": "8.0.1xx",
     "azureFeed": "",
-    "sdkImageOverride": "8.0.100-rtm.23551.15"
+    "sdkImageOverride": "8.0.100"
   },
   "internalfeed": {
     "url": ""

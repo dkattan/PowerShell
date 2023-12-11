@@ -11,7 +11,7 @@ param (
 
     [string] $destination = "$env:WORKSPACE",
 
-    [ValidateSet("win7-x64", "win7-x86", "win-arm", "win-arm64", "fxdependent", "fxdependent-win-desktop")]
+    [ValidateSet("win7-x64", "win7-x86", "win-arm", "win-arm64", "fxdependent", "fxdependent-win-desktop", "browser-wasm", "wasi-wasm")]
     [string] $Runtime = 'win7-x64',
 
     [switch] $ForMinimalSize,

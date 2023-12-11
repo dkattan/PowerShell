@@ -2170,7 +2170,7 @@ namespace System.Management.Automation.Runspaces
                         Bind_SetEnvironment
                     };
 
-                    if (updateOnly)
+                    if (OperatingSystem.IsBrowser() || updateOnly)
                     {
                         // We're typically called to import a module. It seems like this could
                         // still happen in parallel, but calls to WriteError on the wrong thread
@@ -3574,6 +3574,7 @@ namespace System.Management.Automation.Runspaces
                     StringComparer.OrdinalIgnoreCase);
             Parallel.ForEach(
                 Types,
+                new ParallelOptions { MaxDegreeOfParallelism = OperatingSystem.IsBrowser() ? 1 : 3 },
                 sste =>
             {
                 // foreach (var sste in Types)

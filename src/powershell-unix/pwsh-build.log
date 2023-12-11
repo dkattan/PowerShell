@@ -1,0 +1,19 @@
+MSBuild version 17.8.3+195e7f5a3 for .NET
+  Determining projects to restore...
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.csproj (in 455 ms).
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.Commands.Utility\Microsoft.PowerShell.Commands.Utility.csproj (in 455 ms).
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.ConsoleHost\Microsoft.PowerShell.ConsoleHost.csproj (in 455 ms).
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\System.Management.Automation.csproj (in 455 ms).
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.Commands.Management\Microsoft.PowerShell.Commands.Management.csproj (in 455 ms).
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.SDK\Microsoft.PowerShell.SDK.csproj (in 455 ms).
+  Restored C:\Users\dkattan\source\repos\PowerShell\src\powershell-unix\powershell-unix.csproj (in 455 ms).
+  1 of 8 projects are up-to-date for restore.
+  PSVersionInfoGenerator -> C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\SourceGenerators\PSVersionInfoGenerator\bin\Debug\netstandard2.0\SMA.Generator.dll
+  System.Management.Automation -> C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\bin\Debug\net8.0\System.Management.Automation.dll
+  Microsoft.PowerShell.Security -> C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.Security\bin\Debug\net8.0\Microsoft.PowerShell.Security.dll
+  Microsoft.PowerShell.ConsoleHost -> C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.ConsoleHost\bin\Debug\net8.0\Microsoft.PowerShell.ConsoleHost.dll
+  Microsoft.PowerShell.Commands.Utility -> C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.Commands.Utility\bin\Debug\net8.0\Microsoft.PowerShell.Commands.Utility.dll
+  Microsoft.PowerShell.Commands.Management -> C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.Commands.Management\bin\Debug\net8.0\Microsoft.PowerShell.Commands.Management.dll
+  Microsoft.PowerShell.SDK -> C:\Users\dkattan\source\repos\PowerShell\src\Microsoft.PowerShell.SDK\bin\Debug\net8.0\Microsoft.PowerShell.SDK.dll
+  powershell-unix -> C:\Users\dkattan\source\repos\PowerShell\src\powershell-unix\bin\Debug\net8.0\linux-x64\pwsh.dll
+  powershell-unix -> C:\Users\dkattan\source\repos\PowerShell\src\powershell-unix\bin\Debug\net8.0\linux-x64\publish\

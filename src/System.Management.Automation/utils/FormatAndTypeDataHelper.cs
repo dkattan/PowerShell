@@ -73,7 +73,8 @@ namespace System.Management.Automation.Runspaces
 
         private static string GetBaseFolder(Collection<string> independentErrors)
         {
-            return Path.GetDirectoryName(Environment.ProcessPath);
+            return Utils.DefaultPowerShellAppBase
+                   ?? Path.GetDirectoryName(Environment.ProcessPath);
         }
 
         private static string GetAndCheckFullFileName(

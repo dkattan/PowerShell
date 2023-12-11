@@ -1,0 +1,69 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RuntimeIdentifier>wasi-wasm</RuntimeIdentifier>
+    <OutputType>Exe</OutputType>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+</Project>
+<!-- 
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\PowerShell.Common.props"/>
+
+  <PropertyGroup>
+    <Description>PowerShell top-level project with .NET CLI host</Description>
+    <AssemblyName>pwsh</AssemblyName>
+
+    <OutputType>Exe</OutputType>
+    <RuntimeIdentifiers>wasi-wasm</RuntimeIdentifiers>
+    <PublishTrimmed>false</PublishTrimmed>
+    <GlobalPropertiesToRemove>SelfContained</GlobalPropertiesToRemove>
+    <SelfContained>true</SelfContained>
+    <EmitCompilerGeneratedFiles Condition="'$(WasmBuildingForNestedPublish)' == true">false</EmitCompilerGeneratedFiles>
+    <!-- Adding GlobalPropertiesTORemove -> SelfContained resulted in 
+      powershell-wasi -> C:\Users\dkattan\source\repos\PowerShell\src\powershell-wasi\bin\Debug\net8.0\wasi-wasm\pwsh.dll
+      error NETSDK1102: Optimizing assemblies for size is not supported for the selected publish configuration. Please ensure that you are publishing a self-contained app.
+
+      Evidently wasm needs to be self-contained: https://github.com/dotnet/aspnetcore/issues/46711
+      Adding <SelfContained>true</SelfContained> resulted in the same error
+      Adjusting build.psm1 to set self-contained resulted in Trim errors
+      Adding PublishTrimmed=false resulted in 
+      CSC : error CS2001: Source file 'C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\gen\SourceGenerated\Microsoft.Interop.LibraryImportGenerator\Microsoft.Interop.LibraryImportGenerator\LibraryImports.g.cs' could not be found. [C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\System.Management.Automation.csproj]
+
+      CSC : error CS2001: Source file 'C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\gen\SourceGenerated\SMA.Generator\SMA.PSVersionInfoGenerator\PSVersionInfo.g.cs' could not be found. 
+      [C:\Users\dkattan\source\repos\PowerShell\src\System.Management.Automation\System.Management.Automation.csproj]
+-->
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\powershell\Program.cs" Exclude="bin\**;obj\**;**\*.xproj;packages\**" />
+    <Content Include="..\Modules\Unix\**\*;..\Modules\Shared\**\*" >
+      <Link>Modules\%(RecursiveDir)\%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\Schemas\PSMaml\*">
+      <Link>Schemas\PSMaml\%(FileName)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\ThirdPartyNotices.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\..\assets\default.help.txt">
+      <Link>en-US\default.help.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Microsoft.PowerShell.SDK\Microsoft.PowerShell.SDK.csproj" />
+  </ItemGroup>
+
+ </Project>

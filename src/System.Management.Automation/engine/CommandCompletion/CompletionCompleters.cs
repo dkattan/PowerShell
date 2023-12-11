@@ -7489,7 +7489,7 @@ namespace System.Management.Automation
 
         internal static List<CompletionResult> CompleteType(CompletionContext context, string prefix = "", string suffix = "")
         {
-            var localTypeCache = s_typeCache ?? InitializeTypeCache();
+            var localTypeCache = s_typeCache ?? InitializeTypeCache(); //Array.Empty<TypeCompletionMapping[]>(); 
 
             var results = new List<CompletionResult>();
             var completionTextSet = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

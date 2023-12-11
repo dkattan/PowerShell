@@ -160,6 +160,16 @@ namespace System.Management.Automation
 #endif
             }
         }
+        /// <summary>
+        /// True if the current platform is Windows.
+        /// </summary>
+        public static bool IsWasm
+        {
+            get
+            {
+                return (OperatingSystem.IsWasi() || OperatingSystem.IsBrowser());
+            }
+        }
 
 #if UNIX
         // Gets the location for cache and config folders.
@@ -376,7 +386,7 @@ namespace System.Management.Automation
 
         internal static bool NonWindowsIsHardLink(FileSystemInfo fileInfo)
         {
-            return Unix.IsHardLink(fileInfo);
+            return !OperatingSystem.IsBrowser() && Unix.IsHardLink(fileInfo);
         }
 
         internal static string NonWindowsGetUserFromPid(int path)

@@ -35,8 +35,9 @@ function script:Start-NativeExecution {
                 $callerLocationParts = $caller[1].Location -split ":\s*line\s*"
                 $callerFile = $callerLocationParts[0]
                 $callerLine = $callerLocationParts[1]
-
                 $errorMessage = "Execution of {$ScriptBlock} by ${callerFile}: line $callerLine failed with exit code $LASTEXITCODE"
+                $errorMessage += [System.Environment]::NewLine
+                $errorMessage += $ExecutionContext.InvokeCommand.ExpandString($ScriptBlock)
                 throw $errorMessage
             }
             throw "Execution of {$ScriptBlock} failed with exit code $LASTEXITCODE"

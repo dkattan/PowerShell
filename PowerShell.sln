@@ -1,7 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-# https://github.com/dotnet/project-system/blob/master/docs/opening-with-new-project-system.md#project-type-guids
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34321.82
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "powershell-win-core", "src\powershell-win-core\powershell-win-core.csproj", "{8359D422-E0C4-4A0D-94EB-3C9DD16B7932}"
 EndProject
@@ -30,6 +29,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "powershell-unix", "src\powershell-unix\powershell-unix.csproj", "{73EA0BE6-C0C5-4B56-A5AA-DADA4C01D690}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xUnit.tests", "test\xUnit\xUnit.tests.csproj", "{08704934-9764-48CE-86DB-BCF0A1CF7899}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "powershell-wasi", "src\powershell-wasi\powershell-wasi.csproj", "{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}"
 EndProject
 # Configuration mapping comment
 # All global configurations must be mapped to project configurations
@@ -152,7 +153,7 @@ Global
 		{73EA0BE6-C0C5-4B56-A5AA-DADA4C01D690}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73EA0BE6-C0C5-4B56-A5AA-DADA4C01D690}.CodeCoverage|Any CPU.ActiveCfg = CodeCoverage|Any CPU
 		{73EA0BE6-C0C5-4B56-A5AA-DADA4C01D690}.CodeCoverage|Any CPU.Build.0 = CodeCoverage|Any CPU
-		{43D4F8DA-A7DE-494B-81B0-BDE3CFD7B1F1}.CodeCoverage|Any CPU.ActiveCfg = CodeCoverage|Any CPU
+        {43D4F8DA-A7DE-494B-81B0-BDE3CFD7B1F1}.CodeCoverage|Any CPU.ActiveCfg = CodeCoverage|Any CPU
 		{43D4F8DA-A7DE-494B-81B0-BDE3CFD7B1F1}.CodeCoverage|Any CPU.Build.0 = CodeCoverage|Any CPU
 		{43D4F8DA-A7DE-494B-81B0-BDE3CFD7B1F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43D4F8DA-A7DE-494B-81B0-BDE3CFD7B1F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -168,6 +169,14 @@ Global
 		{08704934-9764-48CE-86DB-BCF0A1CF7899}.Linux|Any CPU.Build.0 = Linux|Any CPU
 		{08704934-9764-48CE-86DB-BCF0A1CF7899}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08704934-9764-48CE-86DB-BCF0A1CF7899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.CodeCoverage|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.CodeCoverage|Any CPU.Build.0 = Debug|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.Linux|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.Linux|Any CPU.Build.0 = Debug|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE98E61E-DB8D-4F6D-ADC7-91D1EAA4313C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

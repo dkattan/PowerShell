@@ -138,7 +138,9 @@ function Start-PSBuild {
                      "win-arm",
                      "win-arm64",
                      "win7-x64",
-                     "win7-x86")]
+                     "win7-x86",
+                     "browser-wasm",
+                     "wasi-wasm")]
         [string]$Runtime,
 
         [ValidateSet('Debug', 'Release', 'CodeCoverage', '')] # We might need "Checked" as well
@@ -522,7 +524,7 @@ function New-PSOptions {
                      "osx-x64",
                      "win-arm",
                      "win-arm64",
-                     "win7-x64",
+                     "win7-x64","browser-wasm","wasi-wasm",
                      "win7-x86")]
         [string]$Runtime,
 
@@ -1321,7 +1323,9 @@ function Start-CrossGen {
                      "win-arm",
                      "win-arm64",
                      "win7-x64",
-                     "win7-x86")]
+                     "win7-x86",
+                     "browser-wasm",
+                     "wasi-wasm")]
         [string]
         $Runtime
     )
@@ -1347,7 +1351,7 @@ function Start-CrossGen {
                 "osx-x64",
                 "win-arm",
                 "win-arm64",
-                "win7-x64",
+                "win7-x64","browser-wasm","wasi-wasm",
                 "win7-x86")]
             [string]
             $Runtime
@@ -1897,7 +1901,7 @@ function Start-PSPackage {
         [string[]]$Type,
 
         # Generate windows downlevel package
-        [ValidateSet("win7-x86", "win7-x64", "win-arm", "win-arm64")]
+        [ValidateSet("win7-x86", "win7-x64", "win-arm", "win-arm64", "browser-wasm", "wasi-wasm")]
         [ValidateScript({$Environment.IsWindows})]
         [string] $WindowsRuntime,
 

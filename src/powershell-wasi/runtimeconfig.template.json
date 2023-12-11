@@ -1,0 +1,15 @@
+{
+// This is required to roll forward to supported minor.patch versions of the runtime.
+  "rollForwardOnNoCandidateFx": 1,
+  "wasmHostProperties": {
+    "perHostConfig": [
+      {
+        "name": "wasmtime",
+        "Host": "wasmtime"
+      }
+    ]
+},
+  "configProperties": {
+    "System.Globalization.Invariant": true
+  }  
+}
