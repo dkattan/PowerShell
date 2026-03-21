@@ -73,6 +73,11 @@ namespace System.Management.Automation.Runspaces
 
         private static string GetBaseFolder(Collection<string> independentErrors)
         {
+            if (OperatingSystem.IsBrowser())
+            {
+                return Utils.DefaultPowerShellAppBase;
+            }
+
             return Path.GetDirectoryName(Environment.ProcessPath);
         }
 

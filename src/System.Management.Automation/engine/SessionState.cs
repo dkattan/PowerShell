@@ -339,7 +339,7 @@ namespace System.Management.Automation
             // $PID
             v = new PSVariable(
                     SpecialVariables.PID,
-                    Environment.ProcessId,
+                    OperatingSystem.IsBrowser() ? 0 : Environment.ProcessId,
                     ScopedItemOptions.Constant | ScopedItemOptions.AllScope,
                     RunspaceInit.PIDDescription);
             this.GlobalScope.SetVariable(v.Name, v, asValue: false, force: true, this, CommandOrigin.Internal, fastPath: true);

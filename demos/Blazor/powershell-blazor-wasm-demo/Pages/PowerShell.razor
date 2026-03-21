@@ -1,0 +1,148 @@
+@page "/"
+@using System.IO
+@using System.Linq
+@using System.Threading
+@using PWSH = System.Management.Automation.PowerShell
+@implements IDisposable
+
+<h1>PowerShell Blazor WebAssembly Demo</h1>
+
+<p>This experimental page hosts a PowerShell runspace in the browser using the current WebAssembly-compatible runtime guards.</p>
+
+<textarea style="width:100%;height:220px;font-family:Consolas,monospace;font-size:0.9rem;" @bind="_code"></textarea>
+<div style="margin:1rem 0;display:flex;gap:0.75rem;">
+    <button @onclick="InvokeScript">Run</button>
+    <button @onclick="ClearQuery">Clear</button>
+</div>
+<pre style="white-space:pre-wrap;font-family:Consolas,monospace;">@_results</pre>
+
+@code {
+    private string _code = "$PSVersionTable | Out-String";
+    private string _results = string.Empty;
+    private readonly string _modulesPath = "/opt/microsoft/powershell/Modules";
+    private Runspace? _runspace;
+    private PWSH? _powershell;
+
+    protected override void OnInitialized()
+    {
+        var homePath = Environment.GetEnvironmentVariable("HOME");
+        if (string.IsNullOrWhiteSpace(homePath))
+        {
+            homePath = "/home/web_user";
+            Environment.SetEnvironmentVariable("HOME", homePath);
+        }
+
+        Directory.CreateDirectory(homePath);
+        Environment.SetEnvironmentVariable("XDG_CONFIG_HOME", Path.Combine(homePath, ".config"));
+        Environment.SetEnvironmentVariable("XDG_CACHE_HOME", Path.Combine(homePath, ".cache"));
+        Environment.SetEnvironmentVariable("XDG_DATA_HOME", Path.Combine(homePath, ".local", "share"));
+        Environment.SetEnvironmentVariable("POWERSHELL_TELEMETRY_OPTOUT", "1");
+        Environment.SetEnvironmentVariable("POWERSHELL_CLI_TELEMETRY_OPTOUT", "1");
+        Environment.SetEnvironmentVariable("POWERSHELL_UPDATECHECK_OPTOUT", "1");
+        Environment.SetEnvironmentVariable("UserName", "web_user");
+        Environment.SetEnvironmentVariable("PSModulePath", _modulesPath);
+
+        Directory.CreateDirectory(_modulesPath);
+        CreateModuleManifest("Microsoft.PowerShell.Management", @"
+@{
+    GUID = 'EEFCB906-B326-4E99-9F54-8B4BB6EF3C6D'
+    Author = 'PowerShell'
+    CompanyName = 'Microsoft Corporation'
+    ModuleVersion = '7.0.0.0'
+    CompatiblePSEditions = @('Core')
+    PowerShellVersion = '3.0'
+    FunctionsToExport = @()
+    CmdletsToExport = '*'
+    AliasesToExport = @()
+    NestedModules = @('Microsoft.PowerShell.Commands.Management.dll')
+}
+");
+        CreateModuleManifest("Microsoft.PowerShell.Utility", @"
+@{
+    GUID = '1DA87E53-152B-403E-98DC-74D7B4D63D59'
+    Author = 'PowerShell'
+    CompanyName = 'Microsoft Corporation'
+    ModuleVersion = '7.0.0.0'
+    CompatiblePSEditions = @('Core')
+    PowerShellVersion = '3.0'
+    FunctionsToExport = @()
+    CmdletsToExport = '*'
+    AliasesToExport = @()
+    NestedModules = @('Microsoft.PowerShell.Commands.Utility.dll')
+}
+");
+
+        Directory.SetCurrentDirectory(homePath);
+
+        var initialSessionState = InitialSessionState.CreateDefault2();
+        initialSessionState.ThreadOptions = PSThreadOptions.UseCurrentThread;
+        initialSessionState.ImportPSModule("Microsoft.PowerShell.Utility");
+        initialSessionState.ImportPSModule("Microsoft.PowerShell.Management");
+
+        _runspace = RunspaceFactory.CreateRunspace(initialSessionState);
+        _runspace.Open();
+        _powershell = PWSH.Create(_runspace);
+    }
+
+    private void CreateModuleManifest(string name, string content)
+    {
+        var modulePath = Path.Combine(_modulesPath, name);
+        Directory.CreateDirectory(modulePath);
+        File.WriteAllText(Path.Combine(modulePath, $"{name}.psd1"), content);
+    }
+
+    private async Task InvokeScript()
+    {
+        if (_powershell is null)
+        {
+            _results = "PowerShell is not initialized.";
+            return;
+        }
+
+        _powershell.Commands.Clear();
+        _powershell.Streams.ClearStreams();
+        _powershell.AddScript(_code);
+
+        try
+        {
+            var results = await Task.Factory.FromAsync<PSDataCollection<PSObject>, PSInvocationSettings, PSDataCollection<PSObject>>(
+                _powershell.BeginInvoke,
+                _powershell.EndInvoke,
+                new PSDataCollection<PSObject>(),
+                new PSInvocationSettings(),
+                null);
+
+            var output = string.Join(Environment.NewLine, results.Select(o => o?.BaseObject?.ToString()).Where(s => !string.IsNullOrWhiteSpace(s)));
+            if (_powershell.Streams.Error.Count > 0)
+            {
+                var errors = string.Join(Environment.NewLine, _powershell.Streams.Error.Select(error => error.ToString()));
+                _results = string.IsNullOrWhiteSpace(output) ? errors : $"{output}{Environment.NewLine}{errors}";
+            }
+            else
+            {
+                _results = output;
+            }
+        }
+        catch (Exception ex)
+        {
+            _results = $"Exception:{Environment.NewLine}{ex}";
+        }
+        finally
+        {
+            _powershell.Streams.ClearStreams();
+            _powershell.Commands.Clear();
+        }
+    }
+
+    private void ClearQuery()
+    {
+        _code = string.Empty;
+        _results = string.Empty;
+    }
+
+    public void Dispose()
+    {
+        _powershell?.Dispose();
+        _runspace?.Dispose();
+    }
+}

@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Microsoft.PowerShell.Blazor.Wasm.Demo</RootNamespace>
+    <AssemblyName>pwsh-blazor-wasm-demo</AssemblyName>
+    <LangVersion>preview</LangVersion>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <PublishTrimmed>false</PublishTrimmed>
+    <ThreadPoolMinThreads>1</ThreadPoolMinThreads>
+    <ThreadPoolMaxThreads>1</ThreadPoolMaxThreads>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="11.0.0-preview.1.*" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="11.0.0-preview.1.*" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\System.Management.Automation\System.Management.Automation.csproj" />
+    <ProjectReference Include="..\..\..\src\Microsoft.PowerShell.Commands.Management\Microsoft.PowerShell.Commands.Management.csproj" />
+    <ProjectReference Include="..\..\..\src\Microsoft.PowerShell.Commands.Utility\Microsoft.PowerShell.Commands.Utility.csproj" />
+    <ProjectReference Include="..\..\..\src\Microsoft.PowerShell.ConsoleHost\Microsoft.PowerShell.ConsoleHost.csproj" />
+    <ProjectReference Include="..\..\..\src\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.csproj" />
+  </ItemGroup>
+</Project>

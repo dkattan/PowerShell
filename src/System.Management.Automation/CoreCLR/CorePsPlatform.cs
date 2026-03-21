@@ -416,7 +416,7 @@ namespace System.Management.Automation
 
         internal static bool NonWindowsIsHardLink(FileSystemInfo fileInfo)
         {
-            return Unix.IsHardLink(fileInfo);
+            return !OperatingSystem.IsBrowser() && Unix.IsHardLink(fileInfo);
         }
 
         internal static string NonWindowsGetUserFromPid(int path)
